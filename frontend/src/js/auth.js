@@ -1,4 +1,3 @@
-// frontend/src/js/auth.js
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
@@ -6,11 +5,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (loginForm) {
         loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            console.log('Login attempt:', { email, password }); // Log login attempt
-            
             try {
                 const response = await fetch('http://localhost:3000/api/auth/login', {
                     method: 'POST',
@@ -21,9 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 const data = await response.json();
-                console.log('Login response:', data); // Log the response
 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('user', JSON.stringify(data.user));
                     alert('Login successful!');
@@ -33,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                alert('Login failed. Please try again.');
+                alert('Network error. Please check your connection.');
             }
         });
     }
@@ -41,17 +38,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signupForm) {
         signupForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const accountType = document.querySelector('input[name="accountType"]:checked').value;
 
-            console.log('Signup attempt:', { firstName, lastName, email, phone, password, accountType }); // Log signup attempt
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                accountType: document.querySelector('input[name="accountType"]:checked').value
+            };
 
-            if (password !== confirmPassword) {
+            if (formData.password !== formData.confirmPassword) {
                 alert("Passwords don't match!");
                 return;
             }
@@ -63,19 +61,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        firstName,
-                        lastName,
-                        email,
-                        phone,
-                        password,
-                        role: accountType
+                        firstName: formData.firstName,
+                        lastName: formData.lastName,
+                        email: formData.email,
+                        phone: formData.phone,
+                        password: formData.password,
+                        role: formData.accountType
                     })
                 });
 
                 const data = await response.json();
-                console.log('Registration response:', data); // Log the response
 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     alert('Registration successful! Please log in.');
                     window.location.href = 'login.html';
                 } else {
@@ -83,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Registration error:', error);
-                alert('Registration failed. Please try again.');
+                alert('Network error. Please check your connection.');
             }
         });
     }

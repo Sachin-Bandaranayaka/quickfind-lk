@@ -1,7 +1,5 @@
-// backend/src/models/user.model.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const bcrypt = require('bcrypt');
 
 const User = sequelize.define('User', {
     id: {
@@ -11,15 +9,22 @@ const User = sequelize.define('User', {
     },
     firstName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     lastName: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     email: {
         type: DataTypes.STRING,
         unique: true,
+        allowNull: false,
         validate: {
             isEmail: true
         }
@@ -27,7 +32,10 @@ const User = sequelize.define('User', {
     phone: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: true
+        }
     },
     password: {
         type: DataTypes.STRING,
@@ -42,13 +50,7 @@ const User = sequelize.define('User', {
         defaultValue: 'active'
     }
 }, {
-    hooks: {
-        beforeCreate: async (user) => {
-            if (user.password) {
-                user.password = await bcrypt.hash(user.password, 10);
-            }
-        }
-    }
+    timestamps: true
 });
 
 module.exports = User;

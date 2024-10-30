@@ -3,7 +3,8 @@ require('dotenv').config();
 
 const config = {
     jwt: {
-        secret: process.env.JWT_SECRET || 'fallback-secret-key-for-development'
+        // Using a strong default secret in case environment variable is not set
+        secret: process.env.JWT_SECRET || 'quickfind_lk_secret_key_2024'
     },
     db: {
         host: process.env.DB_HOST || 'localhost',
