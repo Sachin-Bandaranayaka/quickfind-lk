@@ -1,6 +1,8 @@
-// backend/src/models/service.model.js
+// service.model.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const User = require('./user.model');
+const Category = require('./category.model');
 
 const Service = sequelize.define('Service', {
     id: {
@@ -33,19 +35,41 @@ const Service = sequelize.define('Service', {
         allowNull: false
     },
     serviceArea: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER, // radius in kilometers
         allowNull: false
     },
     status: {
-        type: DataTypes.ENUM('pending', 'active', 'inactive'),
+        type: DataTypes.ENUM('pending', 'active', 'inactive', 'rejected'),
         defaultValue: 'pending'
     },
     images: {
-        type: DataTypes.JSON,
+        type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: []
+    },
+    availableDays: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        defaultValue: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    },
+    workingHours: {
+        type: DataTypes.JSON,
+        defaultValue: { start: '09:00', end: '17:00' }
+    },
+    providerId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
+    },
+    categoryId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Categories',
+            key: 'id'
+        }
     }
-}, {
-    timestamps: true
 });
 
 module.exports = Service;
