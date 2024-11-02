@@ -8,14 +8,6 @@ const Service = sequelize.define('Service', {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    providerId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
-    },
     title: {
         type: DataTypes.STRING,
         allowNull: false
@@ -41,28 +33,19 @@ const Service = sequelize.define('Service', {
         allowNull: false
     },
     serviceArea: {
-        type: DataTypes.INTEGER, // radius in kilometers
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     status: {
-        type: DataTypes.ENUM('pending', 'active', 'inactive', 'rejected'),
+        type: DataTypes.ENUM('pending', 'active', 'inactive'),
         defaultValue: 'pending'
     },
     images: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: []
-    },
-    availableDays: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        defaultValue: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-    },
-    workingHours: {
         type: DataTypes.JSON,
-        defaultValue: {
-            start: '09:00',
-            end: '17:00'
-        }
+        defaultValue: []
     }
+}, {
+    timestamps: true
 });
 
 module.exports = Service;
