@@ -53,11 +53,19 @@ Rating.belongsTo(Service, { foreignKey: 'serviceId' });
 Admin.belongsTo(User, { foreignKey: 'userId' });
 User.hasOne(Admin, { foreignKey: 'userId' });
 
+// // Message - User (Sender and Receiver)
+// User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages' });
+// User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
+// Message.belongsTo(User, { as: 'sender', foreignKey: 'senderId' });
+// Message.belongsTo(User, { as: 'receiver', foreignKey: 'receiverId' });
+
 // Message - User (Sender and Receiver)
-User.hasMany(Message, { foreignKey: 'senderId', as: 'sentMessages' });
-User.hasMany(Message, { foreignKey: 'receiverId', as: 'receivedMessages' });
-Message.belongsTo(User, { as: 'sender', foreignKey: 'senderId' });
-Message.belongsTo(User, { as: 'receiver', foreignKey: 'receiverId' });
+User.hasMany(Message, { foreignKey: 'senderId', as: 'userSentMessages' });      // Changed alias to userSentMessages
+User.hasMany(Message, { foreignKey: 'receiverId', as: 'userReceivedMessages' }); // Changed alias to userReceivedMessages
+Message.belongsTo(User, { as: 'messageSender', foreignKey: 'senderId' });        // Changed alias to messageSender
+Message.belongsTo(User, { as: 'messageReceiver', foreignKey: 'receiverId' });    // Changed alias to messageReceiver
+
+
 
 // Favourite - User and Service
 User.hasMany(Favourite, { foreignKey: 'userId' });
